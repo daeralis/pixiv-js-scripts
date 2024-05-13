@@ -3,7 +3,7 @@ Collection of scripts to automate demanding Pixiv tasks.
 
 # Pixiv bulk private/public follows
 Sets all your follows from public to private or vice-versa based on the type viewed.
-One follower is updated every ~1.2 seconds based on site refresh speed.
+One follow is updated every ~1 second based on site refresh speed.
 
 ## Guide:
 1. Visit your "following" page.
