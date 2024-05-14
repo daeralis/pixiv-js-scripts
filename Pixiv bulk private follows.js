@@ -2,17 +2,9 @@
 * Pixiv bulk private/public follows
 * 
 * Sets all your follows from public to private or vice-versa based on the type viewed.
-* To be used on your "following" page:
-* https://www.pixiv.net/en/users/111111/following
-*
-* Guide:
-* 1. Open developer tools (Ctrl+Shift+I)
-* 2. Switch to "Console" tab
-* 3. Paste in code and hit Enter
+* To be used from your "Following" page.
 *
 * Wrapped in an IIFE for browser compatibility.
-*
-* Last updated 5/13/2024
 */
 
 (async function iife() {
