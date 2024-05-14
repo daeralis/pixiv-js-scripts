@@ -12,7 +12,7 @@
 *
 * Wrapped in an IIFE for browser compatibility.
 *
-* Last updated 5/12/2024
+* Last updated 5/13/2024
 */
 
 (async function iife() {
@@ -74,23 +74,16 @@ while ((FollowsEdited < FollowCount) || (FollowCount == 'not-found')) {
 	while (true) {
 
 		var Button = getSafe(() => document.getElementsByClassName('sc-1o6692m-0 hVxezo gtm-profile-user-menu-restrict-changing')[0])
-		var ButtonText = getSafe(() => Button.getElementsByClassName('sc-1utla24-0 bTtACY')[0].textContent)
 		var ButtonAriaDisabled = getSafe(() => Button.getAttribute('aria-disabled'))
 		
 		if (ButtonAriaDisabled == 'false')
 		{
-			if (ButtonText == 'Set as private') {
-				break
-			}
-	
-			if (ButtonText == 'Set as public') {
-				break
-			}
+			Button.click()
+			break
 		}
 
 		await sleep(100)
 	}
-	document.getElementsByClassName('sc-1o6692m-0 hVxezo gtm-profile-user-menu-restrict-changing')[0].click()
 	
 	FollowsEdited++
 	// error checking for follow count
