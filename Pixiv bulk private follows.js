@@ -9,6 +9,13 @@
 
 (async function iife() {
 
+// --------------------- If you have errors, please check that these classes are correct ---------------------
+const FollowCount_Class = 'sc-1mr081w-0 kZlOCw' // Number next to "Users"
+const ArtistName_Class = 'sc-d98f2c-0 sc-19z9m4s-2 QHGGh' // Artist's name
+const DropdownMenuButton_Class = 'sc-1ij5ui8-0 QihHO sc-125tkm8-2 gUcOiA' // Dropdown menu button
+const PrivatePublicButton_Class =  'sc-1o6692m-0 hVxezo gtm-profile-user-menu-restrict-changing' // Private/public button
+
+
 function getSafe(fn, defaultVal) {
 	try {
 	  return fn();
@@ -23,7 +30,7 @@ var FollowCount = 0
 var FollowsEdited = 0
 
 // Get the follow count
-var FollowCount = getSafe(() => document.getElementsByClassName('sc-1mr081w-0 kZlOCw')[0].getElementsByTagName('span')[0].textContent,'not-found')
+var FollowCount = getSafe(() => document.getElementsByClassName(FollowCount_Class)[0].getElementsByTagName('span')[0].textContent,'not-found').replace(/\D/g, "")
 
 // error checking for follow count
 if (FollowCount == 'not-found') {
@@ -36,42 +43,63 @@ var OldArtistName = ""
 
 while ((FollowsEdited < FollowCount) || (FollowCount == 'not-found')) {
 	
-	// Wait for follow list to refresh
-	var RefreshCounter = 0
+	// --------------------- Wait for follow list to refresh ---------------------
+	var DurationCounter = 0
 	while (true) {
-		var ArtistName = getSafe(() => document.getElementsByClassName('sc-d98f2c-0 sc-19z9m4s-2 QHGGh')[0].textContent)
 
+		// Get the first name in the list
+		var ArtistName = getSafe(() => document.getElementsByClassName(ArtistName_Class)[0].textContent)
+
+		// Check if the name is new
 		if ((ArtistName != OldArtistName) && (typeof ArtistName != 'undefined')) {
 			break
 		}
 		
-		RefreshCounter++
+		DurationCounter++
 
 		// Stop the script after 10 seconds of no progress
-		if (RefreshCounter > 100) {
-			throw new Error('No new follows found, script stopped.');
+		if (DurationCounter > 100) {
+			if (FollowsEdited >= 1) {
+				throw new Error('No new follows found, script stopped.');
+			}else {
+				throw new Error('Could not find the artist name, check the guide for help with updating the class name.');
+			}	
 		}
 
 		await sleep(100)
 	}
 	OldArtistName = ArtistName
-		
-	// Click follow dropdown menu
-	while (!document.getElementsByClassName('sc-1ij5ui8-0 QihHO sc-125tkm8-2 gUcOiA')[0]) {
-		await sleep(100)
-	}
-	document.getElementsByClassName('sc-1ij5ui8-0 QihHO sc-125tkm8-2 gUcOiA')[0].click()
-		
-	// Click private/public button when it exists & isn't disabled
+
+	
+	// --------------------- Click the buttons ---------------------
+	var DurationCounter = 0
 	while (true) {
 
-		var Button = getSafe(() => document.getElementsByClassName('sc-1o6692m-0 hVxezo gtm-profile-user-menu-restrict-changing')[0])
+		var Button = document.getElementsByClassName(PrivatePublicButton_Class)[0]
 		var ButtonAriaDisabled = getSafe(() => Button.getAttribute('aria-disabled'))
 		
+		// Click private/public button when it exists & isn't disabled
 		if (ButtonAriaDisabled == 'false')
 		{
 			Button.click()
 			break
+		}
+
+		// Click the follow dropdown menu button if the private/public button is not visible
+		if (ButtonAriaDisabled != 'true') {
+			getSafe(() => document.getElementsByClassName(DropdownMenuButton_Class)[0].click())
+		}
+
+		DurationCounter++
+
+		// Stop the script after 10 seconds of no progress
+		if (DurationCounter > 10) {
+			if (!document.getElementsByClassName(DropdownMenuButton_Class)[0])
+			{
+				throw new Error('Could not find the dropdown menu button, check the guide for help with updating the class name.');
+			} else {
+				throw new Error('Could not find the "Set as private/public" button, check the guide for help with updating the class name.');
+			}
 		}
 
 		await sleep(100)
