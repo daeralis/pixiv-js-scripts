@@ -93,7 +93,7 @@ while ((FollowsEdited < FollowCount) || (FollowCount == 'not-found')) {
 		DurationCounter++
 
 		// Stop the script after 10 seconds of no progress
-		if (DurationCounter > 10) {
+		if (DurationCounter > 100) {
 			if (!document.getElementsByClassName(DropdownMenuButton_Class)[0])
 			{
 				throw new Error('Could not find the dropdown menu button, check the guide for help with updating the class name.');
